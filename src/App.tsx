@@ -1,26 +1,40 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, { useState, useRef, useEffect } from 'react';
+import { select, Selection } from 'd3-selection';
 import './App.css';
 
-function App() {
+const App: React.FC = () => {
+  const svgRef = useRef<SVGSVGElement | null>(null);
+  const [selection, setSelection] = useState<null | Selection<
+    SVGSVGElement | null,
+    unknown,
+    null,
+    undefined
+  >>(null);
+
+  useEffect(() => {
+    if (!selection) {
+      setSelection(select(svgRef.current));
+    } else {
+      selection
+        .append('rect')
+        .attr('height', 200)
+        .attr('width', 300)
+        .attr('fill', 'red');
+    }
+  }, [selection]);
+
   return (
     <div className="App">
       <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
+        <h1>Data visualization wit d3.js, yo!</h1>
+        <svg ref={svgRef}>
+          <rect />
+          <rect />
+          <rect />
+        </svg>
       </header>
     </div>
   );
-}
+};
 
 export default App;
